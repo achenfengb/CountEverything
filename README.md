@@ -43,7 +43,8 @@ the number of bits in plaintext space. it should >= 1024.
 call the **run()** function to start each party's protocol after intializing constructor. For example, to start one data ower's protocol, just
 
 ```
-DataOwner data_owner = new DataOwner(String CSPAddr, String ProcessorAddr, int CSPPort, int ProcessorPort, int[] IDsMask, int ThreadsNum);
+DataOwner data_owner = new DataOwner(String CSPAddr, String ProcessorAddr, int CSPPort, 
+                                     int ProcessorPort, int[] IDsMask, int ThreadsNum);
 data_owner.run();
 ```
 
