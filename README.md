@@ -1,63 +1,53 @@
-Secure Record Linkage
+Count everything using homomorphic encyption
 ====
 
 Requirement
 ---
-JDK8 must be installed to run this program.
+JDK8 must be installed to run this program. The thep.jar lib is required.
 
-Run the program
+Description
 ---
-The two parties are called as geneator and evaluator in garbled circuit protocol. To run the GB protocol, both generator and evaluator need to specify the of their config file (see the specis of configure file in the following) and data file.
+There are three classes (roles): data owner, cryptography service provider (CSP) and processor. All of them are in **Parties** package.
+The data owner provide data for counting; the CSP provide the cryptography service and evaluate the ciphertext of final results; the processor collects the data from data owners in ciphtext form and process the data for CSP evaluation. Following are their constructor details.
 
-To start the run the record linkage program, enter into the program folder, and start one party (generator or evaluator) program:
+1. DataOwner(String CSPAddr, String ProcessorAddr, int CSPPort, int ProcessorPort, int[] IDsMask, int ThreadsNum) 
+
+2. CSP(int CSPPort, int DataOwnersNum, int ThreadsNum, int BitsNum)
+
+3. Processor(String CSPAddr, int CSPPort, int ProcessorPort, int DataOwnersNum, int ThreadsNum)
+
+**CSPAddr:**
+the CSP IP address.
+
+**ProcessorAddr**
+the processor IP address.
+
+**CSPPort**
+the CSP listenning port.
+
+**ProcessorPort**
+the processor listenning port.
+
+**IDsMask**
+the mask of the global IDs. One ID Will be counted for this data owner if the corresponding value equals to 1; otherwise 0.
+
+**ThreadsNum**
+the number computation thread.
+
+**DataOwnersNum**
+the number of data owners. It should be equal to 3 under the current project.
+
+**BitsNum**
+the number of bits in plaintext space. it should >= 1024. 
+
+call the **run()** function to start each party's protocol after intializing constructor. For example, to start one data ower's protocol, just
+
 ```
->>java -jar dist/PatientLinkageGC.jar -config <config file> -data <data file>
+DataOwner data_owner = new DataOwner(String CSPAddr, String ProcessorAddr, int CSPPort, int ProcessorPort, int[] IDsMask, int ThreadsNum);
+data_owner.run();
 ```
 
-Example
----
-The geneator has a 1000 records in file "Source14k_a_1K.csv", and its configure file is "config_gen_1K.txt"; the evaluator has a 1000 records in file "Source14k_b_1K.csv", and its configure file is "config_eva_1K.txt".
-
-In the generator side:
-```
->>java -jar dist/PatientLinkageGC.jar -config configs/config_gen_1K.txt -data data/Source14k_a_1K.csv
-```
-
-In the evaluator side:
-```
->>java -jar dist/PatientLinkageGC.jar -config configs/config_eva_1K.txt -data data/Source14k_b_1K.csv
-```
-
-Configure file specs
----
-Words after "|" in each line are comments.
-
-**party:**
-the role of the program, it can be either “generator” or “evaluator”.
-
-**address:**
-the generator address.
-
-**port:**
-the generator port. Note, for multiple threads computation, the same number of consecutive ports starting from this port will be occupied for communications.
-
-**threshold:**
-matching threshold from the party.
-
-**threads:**
-computation thread number, and both party must have the same thread number.
-
-**records # of the opposite party:**
-as it specifies.
-
-**filter hash bits:**
-the bit number of hashes of the rules.
-
-**results save path:**
-the results will be saved is this file.
-
-**rule:**
-rule stands for the criterion (combination of properties) for matching. Here, the numbers in the left of ->  are character lengths of corresponding property, and the number in the right is the weight of this rule. For example, ‚”3  0  6 -> 1” means the rule contain 3 characters of 1st property, 6 characters of 3rd property, and the rule weight is 1. Note, if the character number of the property contains “S”,  this property will be encoded by soundex method, and the number immediate after S means concatenating with first length of this property. For example, “S3” means encode the property by soundex + the first three character of this property. If the weight is 0, then the garbled circuit will declare a match of two records if one of these rules from the two records are equal.
+The final results are stored in CSP. One can call its member function **getResults()** to obtain the result in the form of integer array: 1 for counted; 0 for otherwise.
 
 Contact
 ---
