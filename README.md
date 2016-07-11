@@ -10,11 +10,11 @@ Description
 There are three classes (roles): data owner, cryptography service provider (CSP) and processor. All of them are in **Parties** package.
 The data owner provide data for counting; the CSP provide the cryptography service and evaluate the ciphertext of final results; the processor collects the data from data owners in ciphtext form and process the data for CSP evaluation. Following are their constructor details.
 
-1. DataOwner(String CSPAddr, String ProcessorAddr, int CSPPort, int ProcessorPort, int[] IDsMask, int ThreadsNum) 
+1. DataOwner(String **CSPAddr**, String **ProcessorAddr**, int **CSPPort**, int **ProcessorPort**, int[] **IDsMask**, int **ThreadsNum**) 
 
-2. CSP(int CSPPort, int DataOwnersNum, int ThreadsNum, int BitsNum)
+2. CSP(int **CSPPort**, int **DataOwnersNum**, int **ThreadsNum**, int **BitsNum**)
 
-3. Processor(String CSPAddr, int CSPPort, int ProcessorPort, int DataOwnersNum, int ThreadsNum)
+3. Processor(String **CSPAddr**, int **CSPPort**, int **ProcessorPort**, int **DataOwnersNum**, int **ThreadsNum**)
 
 **CSPAddr:**
 the CSP IP address.
